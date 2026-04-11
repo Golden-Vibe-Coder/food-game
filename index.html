@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Order Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="cha-ching-sound" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+    </audio>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="store-name">🍔 Baxter's Burgers and Fries 🍟</h1>
+            <div class="stats">
+                <div class="stat">
+                    <span class="label">💰 Total Earnings:</span>
+                    <span class="value" id="earnings">$0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">📋 Orders Completed:</span>
+                    <span class="value" id="orders-completed">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">❌ Orders Missed:</span>
+                    <span class="value" id="orders-missed">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">⭐ Store Rating:</span>
+                    <div class="star-rating" id="star-rating"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-area">
+            <!-- Customers Section -->
+            <div class="customers-section">
+                <h2>Waiting Customers</h2>
+                <div class="customers-queue" id="customers-queue">
+                    <div class="customer-slot" id="slot-0"></div>
+                    <div class="customer-slot" id="slot-1"></div>
+                    <div class="customer-slot" id="slot-2"></div>
+                    <div class="customer-slot" id="slot-3"></div>
+                </div>
+            </div>
+
+            <!-- Order Building Section -->
+            <div class="order-section">
+                <div class="order-area">
+                    <h3>Current Order</h3>
+                    <div class="order-display" id="order-display">
+                        <p class="placeholder">Click ingredients to build an order</p>
+                    </div>
+                </div>
+
+                <!-- Ingredient Selection -->
+                <div class="ingredients-area">
+                    <h3>Menu</h3>
+                    <div class="ingredient-buttons">
+                        <button class="ingredient-btn burger" data-ingredient="burger" title="Burger - $15">
+                            🍔 Burger
+                        </button>
+                        <button class="ingredient-btn fries" data-ingredient="fries" title="Fries - $7">
+                            🍟 Fries
+                        </button>
+                        <button class="ingredient-btn milkshake" data-ingredient="milkshake" title="Milkshake - $9">
+                            🥤 Milkshake
+                        </button>
+                        <button class="ingredient-btn friedpickles" data-ingredient="friedpickles" title="Fried Pickles - $3">
+                            🥒 Fried Pickles
+                        </button>
+                        <button class="ingredient-btn clear" id="clear-btn" title="Clear current order">
+                            🗑️ Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="controls">
+            <button id="start-btn" class="btn btn-primary">Start Game</button>
+            <button id="reset-btn" class="btn btn-secondary">Reset Game</button>
+        </div>
+
+        <!-- Game Status -->
+        <div class="game-status" id="game-status">Ready to play! Click "Start Game" to begin.</div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
