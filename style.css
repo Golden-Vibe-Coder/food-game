@@ -110,6 +110,36 @@ body {
     transform: translateY(-2px);
 }
 
+/* Disable hover on touch devices to prevent persistent hover state */
+@media (hover: none) and (pointer: coarse) {
+    .customer-slot:hover:not(.empty) {
+        border-color: #dee2e6;
+        box-shadow: none;
+        transform: none;
+        background: white;
+    }
+}
+
+.customer-slot:focus {
+    outline: none;
+}
+
+.customer-slot:active:not(.empty),
+.customer-slot.tapped:not(.empty) {
+    border-color: #667eea !important;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4) !important;
+    transform: translateY(-2px) !important;
+    background: #f0f4ff !important;
+}
+
+/* Enable :active on iOS */
+.customer-slot {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 .customer-slot.empty {
     border-style: dashed;
     color: #999;
@@ -400,21 +430,274 @@ body {
 }
 
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .game-container {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
     .game-area {
         grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .order-section {
+        gap: 10px;
     }
 
     .header h1 {
-        font-size: 1.8em;
+        font-size: 1.5em;
     }
 
     .stats {
+        gap: 15px;
+    }
+
+    .stat {
+        font-size: 0.9em;
+    }
+
+    .stat .label {
+        font-size: 0;
+    }
+
+    .stat .label::before {
+        font-size: 1.2rem;
+    }
+
+    /* Add emojis back for each stat */
+    .stat:nth-child(1) .label::before { content: '💰 '; }
+    .stat:nth-child(2) .label::before { content: '📋 '; }
+    .stat:nth-child(3) .label::before { content: '❌ '; }
+    .stat:nth-child(4) .label::before { content: '⭐ '; }
+
+    .stat .value {
+        font-size: 1.1em;
+    }
+
+    .customers-section,
+    .order-area,
+    .ingredients-area {
+        padding: 15px;
+    }
+
+    .customers-section h2,
+    .order-area h3,
+    .ingredients-area h3 {
+        margin-bottom: 10px;
+    }
+
+    .customers-queue {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Hide slots 3 and 4 on mobile */
+    #slot-2,
+    #slot-3 {
+        display: none;
+    }
+
+    .customer-slot {
+        height: auto;
+        min-height: 60px;
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .customer-info {
+        display: flex;
         flex-direction: column;
-        gap: 20px;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        width: 65px;
+        flex-shrink: 0;
+    }
+
+    .customer {
+        font-size: 1.8em;
+        margin-bottom: 0;
+        line-height: 1;
+        width: 100%;
+        text-align: center;
+    }
+
+    .customer-name {
+        font-size: 0.75em;
+        text-align: center;
+        margin-bottom: 0;
+        line-height: 1;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .order-icons {
+        font-size: 1.2em;
+        margin-top: 0;
+        gap: 3px;
+        display: flex;
+        align-items: center;
     }
 
     .ingredient-buttons {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .ingredient-btn {
+        flex: 1;
+        min-width: 60px;
+        padding: 15px 10px;
+        font-size: 2.5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-indent: -9999px;
+        line-height: 0;
+    }
+
+    /* Show only emoji on mobile */
+    .ingredient-btn.burger::after { content: '🍔'; text-indent: 0; position: absolute; }
+    .ingredient-btn.fries::after { content: '🍟'; text-indent: 0; position: absolute; }
+    .ingredient-btn.milkshake::after { content: '🥤'; text-indent: 0; position: absolute; }
+    .ingredient-btn.friedpickles::after { content: '🥒'; text-indent: 0; position: absolute; }
+    .ingredient-btn.clear::after { content: '🗑️'; text-indent: 0; position: absolute; }
+
+    .btn {
+        padding: 15px 25px;
+        font-size: 1em;
+        width: 100%;
+    }
+
+    .controls {
+        gap: 10px;
+    }
+
+    .order-display {
+        min-height: 80px;
+        padding: 15px;
+    }
+
+    .customer-feedback {
+        font-size: 1.5em;
+        padding: 10px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 15px;
+    }
+
+    .game-area {
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .order-section {
+        gap: 10px;
+    }
+
+    .customers-section h2,
+    .order-area h3,
+    .ingredients-area h3 {
+        margin-bottom: 10px;
+    }
+
+    .header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+    }
+
+    .header h1 {
+        font-size: 1.2em;
+        margin-bottom: 12px;
+    }
+
+    .stats {
+        gap: 10px;
+    }
+
+    .stat {
+        font-size: 0.8em;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .star-rating {
+        font-size: 1em;
+    }
+
+    .customer-slot {
+        height: auto;
+        min-height: 55px;
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .customer-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        width: 60px;
+        flex-shrink: 0;
+    }
+
+    .customer {
+        font-size: 1.6em;
+        margin-bottom: 0;
+        line-height: 1;
+        width: 100%;
+        text-align: center;
+    }
+
+    .customer-name {
+        font-size: 0.7em;
+        line-height: 1;
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .order-icons {
+        font-size: 1.1em;
+        gap: 3px;
+    }
+
+    .ingredient-btn {
+        padding: 16px;
+        font-size: 1em;
+    }
+
+    .order-display {
+        min-height: 50px;
+        padding: 10px;
+    }
+
+    .order-item {
+        font-size: 0.85em;
+        padding: 6px 10px;
     }
 }
 
