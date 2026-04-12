@@ -1,0 +1,41 @@
+Baxter's Burgers & Fries — Game Rules
+======================================
+
+HOW TO PLAY
+-----------
+- Customers arrive and wait in the queue with their order shown as icons
+- Build the matching order by tapping the menu items at the bottom
+- Tap the customer to serve them — if your order matches, you get paid
+- Tap "Clear" to reset your current order and start over
+- Customers change mood over time: 😊 (fresh) → 😐 (waiting) → 😠 (impatient)
+- A customer leaves after 30 seconds if not served
+
+
+MENU & EARNINGS
+---------------
+- 🍔 Burger        — $15
+- 🍟 Fries         — $7
+- 🥤 Milkshake     — $9
+- 🥒 Fried Pickles — $3
+- You earn the full item total when an order is served correctly
+- Item order does not matter — just the items themselves
+
+
+STORE RATING (0–5 stars)
+------------------------
+- Your rating goes up each time you correctly serve an order
+- The faster you serve, the bigger the rating boost
+  - Serving immediately: +1.0 stars
+  - Serving near the deadline: +0.03 stars
+- Your rating goes down when:
+  - You serve the wrong order to a customer (~-0.09 stars)
+  - A customer leaves because their time ran out (~-0.09 stars)
+- Rating can never go below 0 or above 5
+
+
+TIPS
+----
+- Prioritize angry customers (😠) — they are about to walk out
+- Serving quickly earns more rating than serving slowly
+- A wrong order costs you rating, so double-check before tapping a customer
+- Up to 4 customers can be waiting at once — keep the queue moving

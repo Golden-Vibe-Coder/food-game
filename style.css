@@ -10,140 +10,220 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 20px;
+    align-items: flex-start;
+    padding: 10px;
 }
 
 .game-container {
     background: white;
-    border-radius: 20px;
+    border-radius: 15px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     max-width: 1200px;
     width: 100%;
-    padding: 40px;
+    padding: 15px;
 }
+
+/* ─── Header ─────────────────────────────────────────────── */
 
 .header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     border-bottom: 3px solid #667eea;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .header h1 {
-    font-size: 2.5em;
+    font-size: 1.2em;
     color: #333;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .stats {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
 .stat {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    font-size: 1.1em;
+    text-align: center;
+    font-size: 0.8em;
+    min-width: 40px;
+    gap: 5px;
 }
 
 .stat .label {
     color: #666;
     font-weight: bold;
+    font-size: 0;
 }
+
+.stat .label::before {
+    font-size: 1.2rem;
+}
+
+/* Emoji icons for stats on mobile */
+.stat:nth-child(1) .label::before { content: '💰'; }
+.stat:nth-child(2) .label::before { content: '📋'; }
+.stat:nth-child(3) .label::before { content: '❌'; }
+.stat:nth-child(4) .label::before { content: '⭐'; }
 
 .stat .value {
     color: #667eea;
-    font-size: 1.3em;
+    font-size: 1.1em;
     font-weight: bold;
 }
 
+.star-rating {
+    display: inline;
+    font-size: 1em;
+    letter-spacing: 3px;
+}
+
+.star {
+    color: #ddd;
+    transition: color 0.3s ease;
+}
+
+.star.filled {
+    color: #ffc107;
+}
+
+.star.half {
+    background: linear-gradient(90deg, #ffc107 50%, #ddd 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ─── Game Area ───────────────────────────────────────────── */
+
 .game-area {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-bottom: 30px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
 }
+
+/* ─── Customers Section ───────────────────────────────────── */
 
 .customers-section {
     background: #f8f9fa;
-    padding: 20px;
+    padding: 10px;
     border-radius: 15px;
     border: 2px solid #e9ecef;
 }
 
 .customers-section h2 {
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 1.3em;
 }
 
 .customers-queue {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: 5px;
+}
+
+/* Hide slots 3 and 4 on mobile */
+#slot-2,
+#slot-3 {
+    display: none;
 }
 
 .customer-slot {
     background: white;
     border: 3px solid #dee2e6;
     border-radius: 12px;
-    padding: 20px;
+    padding: 8px 10px;
     text-align: center;
-    height: 150px;
+    height: 68px;
+    min-height: 68px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    gap: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
-}
-
-.customer-slot:hover:not(.empty) {
-    border-color: #667eea;
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-    transform: translateY(-2px);
-}
-
-/* Disable hover on touch devices to prevent persistent hover state */
-@media (hover: none) and (pointer: coarse) {
-    .customer-slot:hover:not(.empty) {
-        border-color: #dee2e6;
-        box-shadow: none;
-        transform: none;
-        background: white;
-    }
-}
-
-.customer-slot:focus {
-    outline: none;
-}
-
-.customer-slot:active:not(.empty),
-.customer-slot.tapped:not(.empty) {
-    border-color: #667eea !important;
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4) !important;
-    transform: translateY(-2px) !important;
-    background: #f0f4ff !important;
-}
-
-/* Enable :active on iOS */
-.customer-slot {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
 }
 
+/* Disable hover on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .customer-slot:hover:not(.empty) {
+        border-color: #dee2e6;
+        box-shadow: none;
+        background: white;
+    }
+}
+
+.customer-slot:focus {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.customer-slot:active:not(.empty),
+.customer-slot.tapped:not(.empty) {
+    border-color: #667eea !important;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4) !important;
+    background: #f0f4ff !important;
+}
+
 .customer-slot.empty {
     border-style: solid;
     border-color: #dee2e6;
     color: #999;
+}
+
+.customer-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    width: 60px;
+    flex-shrink: 0;
+}
+
+.customer {
+    font-size: 1.6em;
+    margin-bottom: 0;
+    line-height: 1;
+    width: 100%;
+    text-align: center;
+}
+
+.customer-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0;
+    font-size: 0.8em;
+    line-height: 1;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.order-icons {
+    font-size: 1.1em;
+    margin-top: 0;
+    gap: 3px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .customer-feedback {
@@ -153,10 +233,10 @@ body {
     transform: translate(-50%, -50%);
     background: rgba(40, 167, 69, 0.95);
     color: white;
-    padding: 12px 20px;
+    padding: 10px 15px;
     border-radius: 8px;
     font-weight: bold;
-    font-size: 1.8em;
+    font-size: 1.5em;
     white-space: nowrap;
     animation: feedbackPopup 2s ease-out forwards;
     pointer-events: none;
@@ -178,56 +258,40 @@ body {
     }
 }
 
-
-.customer {
-    font-size: 3em;
-    margin-bottom: 10px;
-}
-
-.customer-name {
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 8px;
-    font-size: 0.9em;
-}
-
-.order-icons {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 8px;
-    font-size: 1.2em;
-}
+/* ─── Order Section ───────────────────────────────────────── */
 
 .order-section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
 
 .order-area {
     background: #f8f9fa;
-    padding: 20px;
+    padding: 10px 8px;
     border-radius: 15px;
     border: 2px solid #e9ecef;
 }
 
 .order-area h3 {
     color: #333;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: 1.1em;
 }
 
 .order-display {
+    --op: 8px;
+    --item-h: 34px;
+    --gap: 5px;
     background: white;
     border: 3px dashed #dee2e6;
     border-radius: 10px;
-    padding: 20px;
-    min-height: 90px;
+    padding: var(--op);
+    height: calc(var(--op) * 2 + var(--item-h) * 2 + var(--gap) + 6px);
+    overflow: hidden;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: var(--gap);
     align-content: flex-start;
 }
 
@@ -240,17 +304,38 @@ body {
 .order-item {
     background: #667eea;
     color: white;
-    padding: 8px 12px;
+    padding: 0 12px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.9em;
+    font-size: 0.85em;
+    height: var(--item-h);
     animation: popIn 0.3s ease;
 }
 
-.order-item span {
+.order-item span:not(.order-qty) {
     font-size: 1.2em;
+}
+
+.order-item.burger     { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.order-item.fries      { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.order-item.milkshake  { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+.order-item.friedpickles { background: linear-gradient(135deg, #27ae60, #229954); }
+
+.order-qty {
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 800;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    letter-spacing: -0.02em;
 }
 
 @keyframes popIn {
@@ -264,85 +349,96 @@ body {
     }
 }
 
+/* ─── Ingredients Area ────────────────────────────────────── */
+
 .ingredients-area {
     background: #f8f9fa;
-    padding: 20px;
+    padding: 15px;
     border-radius: 15px;
     border: 2px solid #e9ecef;
 }
 
 .ingredients-area h3 {
     color: #333;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: 1.1em;
 }
 
 .ingredient-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .ingredient-btn {
-    padding: 15px;
+    flex: 1;
+    min-width: 60px;
+    min-height: 44px;
+    padding: 15px 10px;
     border: none;
     border-radius: 10px;
-    font-size: 1em;
+    font-size: 2.5em;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: box-shadow 0.2s ease, filter 0.2s ease;
     color: white;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-indent: -9999px;
+    line-height: 0;
+}
+
+/* Show only emoji on mobile */
+.ingredient-btn.burger::after     { content: '🍔'; text-indent: 0; position: absolute; }
+.ingredient-btn.fries::after      { content: '🍟'; text-indent: 0; position: absolute; }
+.ingredient-btn.milkshake::after  { content: '🥤'; text-indent: 0; position: absolute; }
+.ingredient-btn.friedpickles::after { content: '🥒'; text-indent: 0; position: absolute; }
+.ingredient-btn.clear::after      { content: '🗑️'; text-indent: 0; position: absolute; }
+
+.ingredient-btn.clear {
+    flex-basis: 100%;
 }
 
 .ingredient-btn:hover {
-    transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.1);
 }
 
 .ingredient-btn:active {
-    transform: scale(0.95);
+    filter: brightness(0.95);
 }
 
-.ingredient-btn.burger {
-    background: linear-gradient(135deg, #f39c12, #e67e22);
-}
+.ingredient-btn.burger     { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.ingredient-btn.fries      { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.ingredient-btn.milkshake  { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+.ingredient-btn.friedpickles { background: linear-gradient(135deg, #27ae60, #229954); }
+.ingredient-btn.clear      { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
 
-.ingredient-btn.fries {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-}
-
-.ingredient-btn.milkshake {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
-}
-
-.ingredient-btn.friedpickles {
-    background: linear-gradient(135deg, #27ae60, #229954);
-}
-
-.ingredient-btn.clear {
-    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-    grid-column: 1 / -1;
-}
+/* ─── Controls ────────────────────────────────────────────── */
 
 .controls {
     display: flex;
-    gap: 15px;
+    gap: 10px;
     justify-content: center;
     margin-bottom: 20px;
     flex-wrap: wrap;
 }
 
 .btn {
-    padding: 15px 30px;
+    padding: 15px 25px;
     border: none;
     border-radius: 10px;
-    font-size: 1.1em;
+    font-size: 1em;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease, filter 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
+    width: 100%;
 }
 
 .btn-primary {
@@ -352,12 +448,12 @@ body {
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    filter: brightness(1.1);
 }
 
 .btn-primary:active {
-    transform: translateY(0);
+    filter: brightness(0.95);
 }
 
 .btn-secondary {
@@ -366,49 +462,16 @@ body {
 }
 
 .btn-secondary:hover {
-    background: #7f8c8d;
+    filter: brightness(1.1);
 }
 
 .btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
 }
 
-.game-status {
-    background: #ecf0f1;
-    border: 2px solid #bdc3c7;
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    color: #333;
-    font-weight: bold;
-    font-size: 1em;
-    display: none;
-}
 
-.game-status.success,
-.game-status.error {
-    display: block;
-}
-
-.game-status.success {
-    background: #d4edda;
-    border-color: #28a745;
-    color: #155724;
-}
-
-.game-status.error {
-    background: #f8d7da;
-    border-color: #f5c6cb;
-    color: #721c24;
-}
-
-.game-status.info {
-    background: #d1ecf1;
-    border-color: #bee5eb;
-    color: #0c5460;
-}
+/* ─── Money Popup ─────────────────────────────────────────── */
 
 @keyframes moneyFloat {
     0% {
@@ -430,9 +493,14 @@ body {
     pointer-events: none;
 }
 
-@media (max-width: 768px) {
+/* ═══════════════════════════════════════════════════════════
+   Tablet  (min-width: 481px)
+═══════════════════════════════════════════════════════════ */
+
+@media (min-width: 481px) {
     body {
         padding: 10px;
+        align-items: center;
     }
 
     .game-container {
@@ -440,287 +508,249 @@ body {
         border-radius: 15px;
     }
 
-    .game-area {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        margin-bottom: 10px;
-    }
-
-    .order-section {
-        gap: 10px;
-    }
-
-    .header h1 {
-        font-size: 1.5em;
-    }
-
-    .stats {
-        gap: 15px;
-    }
-
-    .stat {
-        font-size: 0.9em;
-    }
-
-    .stat .label {
-        font-size: 0;
-    }
-
-    .stat .label::before {
-        font-size: 1.2rem;
-    }
-
-    /* Add emojis back for each stat */
-    .stat:nth-child(1) .label::before { content: '💰 '; }
-    .stat:nth-child(2) .label::before { content: '📋 '; }
-    .stat:nth-child(3) .label::before { content: '❌ '; }
-    .stat:nth-child(4) .label::before { content: '⭐ '; }
-
-    .stat .value {
-        font-size: 1.1em;
-    }
-
-    .customers-section,
-    .order-area,
-    .ingredients-area {
-        padding: 15px;
-    }
-
-    .customers-section h2,
-    .order-area h3,
-    .ingredients-area h3 {
-        margin-bottom: 10px;
-    }
-
-    .customers-queue {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    /* Hide slots 3 and 4 on mobile */
-    #slot-2,
-    #slot-3 {
-        display: none;
-    }
-
-    .customer-slot {
-        height: 72px;
-        min-height: 72px;
-        padding: 8px 12px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .customer-info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2px;
-        width: 65px;
-        flex-shrink: 0;
-    }
-
-    .customer {
-        font-size: 1.8em;
-        margin-bottom: 0;
-        line-height: 1;
-        width: 100%;
-        text-align: center;
-    }
-
-    .customer-name {
-        font-size: 0.75em;
-        text-align: center;
-        margin-bottom: 0;
-        line-height: 1;
-        width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .order-icons {
-        font-size: 1.2em;
-        margin-top: 0;
-        gap: 3px;
-        display: flex;
-        align-items: center;
-    }
-
-    .ingredient-buttons {
-        display: flex;
-        flex-direction: row;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .ingredient-btn {
-        flex: 1;
-        min-width: 60px;
-        min-height: 44px;
-        padding: 15px 10px;
-        font-size: 2.5em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-indent: -9999px;
-        line-height: 0;
-    }
-
-    /* Show only emoji on mobile */
-    .ingredient-btn.burger::after { content: '🍔'; text-indent: 0; position: absolute; }
-    .ingredient-btn.fries::after { content: '🍟'; text-indent: 0; position: absolute; }
-    .ingredient-btn.milkshake::after { content: '🥤'; text-indent: 0; position: absolute; }
-    .ingredient-btn.friedpickles::after { content: '🥒'; text-indent: 0; position: absolute; }
-    .ingredient-btn.clear::after { content: '🗑️'; text-indent: 0; position: absolute; }
-
-    .btn {
-        padding: 15px 25px;
-        font-size: 1em;
-        width: 100%;
-    }
-
-    .controls {
-        gap: 10px;
-    }
-
-    .order-display {
-        min-height: 80px;
-        padding: 15px;
-    }
-
-    .customer-feedback {
-        font-size: 1.5em;
-        padding: 10px 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    .game-container {
-        padding: 15px;
-    }
-
-    .game-area {
-        gap: 10px;
-        margin-bottom: 10px;
-    }
-
-    .order-section {
-        gap: 10px;
-    }
-
-    .customers-section h2,
-    .order-area h3,
-    .ingredients-area h3 {
-        margin-bottom: 10px;
-    }
-
     .header {
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         padding-bottom: 15px;
     }
 
     .header h1 {
-        font-size: 1.2em;
-        margin-bottom: 12px;
+        font-size: 1.8em;
+        margin-bottom: 15px;
     }
 
     .stats {
-        gap: 10px;
+        gap: 20px;
     }
 
     .stat {
-        font-size: 0.8em;
-        flex-direction: column;
-        gap: 5px;
+        font-size: 1em;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        min-width: unset;
+    }
+
+    .stat .label {
+        font-size: 1em;
+    }
+
+    /* Restore full label text — clear pseudo-content override */
+    .stat:nth-child(1) .label::before,
+    .stat:nth-child(2) .label::before,
+    .stat:nth-child(3) .label::before,
+    .stat:nth-child(4) .label::before {
+        content: none;
+    }
+
+    .stat .value {
+        font-size: 1.2em;
     }
 
     .star-rating {
-        font-size: 1em;
+        font-size: 1.3em;
+    }
+
+    .game-area {
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .customers-section {
+        padding: 20px;
+    }
+
+    .customers-section h2 {
+        margin-bottom: 15px;
+    }
+
+    .customers-queue {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    #slot-2,
+    #slot-3 {
+        display: flex;
     }
 
     .customer-slot {
-        height: 68px;
-        min-height: 68px;
-        padding: 8px 10px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 8px;
+        height: 110px;
+        min-height: 110px;
+        padding: 15px;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0;
+    }
+
+    .customer-slot:hover:not(.empty) {
+        border-color: #667eea;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
     }
 
     .customer-info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2px;
-        width: 60px;
-        flex-shrink: 0;
+        width: auto;
+        flex-shrink: unset;
     }
 
     .customer {
-        font-size: 1.6em;
-        margin-bottom: 0;
-        line-height: 1;
-        width: 100%;
-        text-align: center;
+        font-size: 2.5em;
+        margin-bottom: 5px;
     }
 
     .customer-name {
-        font-size: 0.7em;
-        line-height: 1;
-        width: 100%;
-        text-align: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        font-size: 0.85em;
+        margin-bottom: 5px;
     }
 
     .order-icons {
-        font-size: 1.1em;
-        gap: 3px;
+        font-size: 1.2em;
+        margin-top: 5px;
+        gap: 5px;
     }
 
-    .ingredient-btn {
-        padding: 16px;
-        font-size: 1em;
+    .customer-feedback {
+        font-size: 1.8em;
+        padding: 12px 20px;
+    }
+
+    .order-section {
+        gap: 15px;
+    }
+
+    .order-area {
+        padding: 15px;
+    }
+
+    .order-area h3 {
+        margin-bottom: 12px;
     }
 
     .order-display {
-        min-height: 50px;
-        padding: 10px;
+        --op: 15px;
+        --item-h: 37px;
+        --gap: 5px;
     }
 
     .order-item {
-        font-size: 0.85em;
-        padding: 6px 10px;
+        font-size: 0.9em;
+        padding: 0 12px;
+    }
+
+    .ingredients-area {
+        padding: 15px;
+    }
+
+    .ingredients-area h3 {
+        margin-bottom: 12px;
+    }
+
+    .ingredient-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .ingredient-btn {
+        flex: unset;
+        min-width: unset;
+        padding: 12px;
+        font-size: 1em;
+        text-indent: 0;
+        line-height: normal;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .ingredient-btn::after {
+        display: none;
+    }
+
+    .ingredient-btn.clear {
+        flex-basis: unset;
+        grid-column: 1 / -1;
+    }
+
+    .controls {
+        gap: 15px;
+    }
+
+    .btn {
+        width: auto;
+        padding: 15px 30px;
+        font-size: 1.1em;
     }
 }
 
-.star-rating {
-    display: inline;
-    font-size: 1.3em;
-    letter-spacing: 3px;
-}
+/* ═══════════════════════════════════════════════════════════
+   Desktop  (min-width: 769px)
+═══════════════════════════════════════════════════════════ */
 
-.star {
-    color: #ddd;
-    transition: color 0.3s ease;
-}
+@media (min-width: 769px) {
+    body {
+        padding: 20px;
+    }
 
-.star.filled {
-    color: #ffc107;
-}
+    .game-container {
+        padding: 40px;
+        border-radius: 20px;
+    }
 
-.star.half {
-    background: linear-gradient(90deg, #ffc107 50%, #ddd 50%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    .header {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+    }
+
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+    }
+
+    .stats {
+        gap: 40px;
+    }
+
+    .game-area {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .customers-section {
+        padding: 20px;
+    }
+
+    .customer-slot {
+        height: 150px;
+        min-height: 150px;
+        padding: 20px;
+    }
+
+    .customer {
+        font-size: 3em;
+    }
+
+    .customer-name {
+        font-size: 0.9em;
+    }
+
+    .order-section {
+        gap: 20px;
+    }
+
+    .order-area {
+        padding: 20px;
+    }
+
+    .order-display {
+        --op: 20px;
+        --item-h: 40px;
+        --gap: 10px;
+    }
+
+    .order-item {
+        padding: 0 12px;
+    }
+
+    .ingredients-area {
+        padding: 20px;
+    }
 }
