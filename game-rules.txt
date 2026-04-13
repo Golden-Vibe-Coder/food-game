@@ -28,8 +28,9 @@ STORE RATING (0–5 stars)
   - Serving immediately: +1.0 stars
   - Serving near the deadline: +0.03 stars
 - Your rating goes down when:
-  - You serve the wrong order to a customer (~-0.09 stars)
-  - A customer leaves because their time ran out (~-0.09 stars)
+  - You serve the wrong order to a customer (-0.078 to -0.086 stars)
+  - A customer leaves because their time ran out (-0.078 to -0.086 stars)
+  - Larger orders penalize slightly less than smaller ones
 - Rating can never go below 0 or above 5
 
 
