@@ -96,12 +96,7 @@ body {
     color: #ffc107;
 }
 
-.star.half {
-    background: linear-gradient(90deg, #ffc107 50%, #ddd 50%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+
 
 /* ─── Game Area ───────────────────────────────────────────── */
 
@@ -441,7 +436,7 @@ body {
     transition: box-shadow 0.3s ease, filter 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
-    width: 100%;
+    flex: 1;
 }
 
 .btn-primary {
@@ -494,6 +489,13 @@ body {
     color: #28a745;
     animation: moneyFloat 1s ease-out forwards;
     pointer-events: none;
+}
+
+.attribution {
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 8px;
+    opacity: 0.6;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -677,7 +679,6 @@ body {
     }
 
     .btn {
-        width: auto;
         padding: 15px 30px;
         font-size: 1.1em;
     }

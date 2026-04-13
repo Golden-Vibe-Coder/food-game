@@ -24,9 +24,14 @@ MENU & EARNINGS
 STORE RATING (0–5 stars)
 ------------------------
 - Your rating goes up each time you correctly serve an order
+- Both speed and order size affect how much your rating increases
+  - Larger orders give a bigger potential boost than smaller ones
+  - 1-item order: up to +0.50 stars
+  - 2-item order: up to +0.75 stars
+  - 3-item order: up to +1.00 stars
 - The faster you serve, the bigger the rating boost
-  - Serving immediately: +1.0 stars
-  - Serving near the deadline: +0.03 stars
+  - Serving immediately: full boost for that order size
+  - Serving near the deadline: +0.03 stars (minimum, regardless of size)
 - Your rating goes down when:
   - You serve the wrong order to a customer (-0.078 to -0.086 stars)
   - A customer leaves because their time ran out (-0.078 to -0.086 stars)

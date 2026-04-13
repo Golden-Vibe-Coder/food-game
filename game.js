@@ -17,7 +17,15 @@ const GAME_CONFIG={
         'Riley',
         'Jamie',
         'Sam',
-        'Charlie'
+        'Charlie',
+        'Taylor',
+        'Quinn',
+        'Drew',
+        'Avery',
+        'Blake',
+        'Sage',
+        'Reese',
+        'Parker'
     ]
 };
 let gameState={isRunning:false,isPaused:false,totalMoney:0,ordersCompleted:0,currentOrder:[],customers:Array(GAME_CONFIG.maxCustomers).fill(null),nextCustomerId:0,spawnInterval:null,rating:0,ordersMissed:0,expireCheckInterval:null};
@@ -71,6 +79,8 @@ class Customer {
         return (Date.now() - this.spawnTime) > 30000;
     }
 }
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+const orderPlaceholderText = isTouchDevice ? 'Tap menu items to build an order' : 'Click menu items to build an order';
 function initGame() {
     gameState.isRunning = false;
     gameState.totalMoney = 0;
@@ -144,7 +154,7 @@ function clearOrder() {
 }
 
 function serveCustomer(customerId) {
-    if (!gameState.isRunning) return;
+    if (!gameState.isRunning || gameState.isPaused) return;
 
     const customerIndex = gameState.customers.findIndex(c => c && c.id === customerId);
     if (customerIndex === -1) return;
@@ -160,7 +170,9 @@ function serveCustomer(customerId) {
         gameState.ordersCompleted++;
 
         const timeTaken = (Date.now() - customer.spawnTime) / 1000;
-        const reward = Math.max(0.03, 1.0 - (timeTaken / 30) * 0.97);
+        // Reward scaling from game-rules.txt: a 1-item order starts at 0.5, and each additional item adds 0.25.
+        const sizeMultiplier = 0.5 + (customer.order.length - 1) * 0.25;
+        const reward = Math.max(0.03, (1.0 - (timeTaken / 30) * 0.97) * sizeMultiplier);
         gameState.rating = Math.min(5, gameState.rating + reward);
         gameState.currentOrder = [];
         gameState.customers[customerIndex].served = true;
@@ -259,7 +271,13 @@ function renderStars() {
             html += '<span class="star filled">★</span>';
         } else if (starFill > 0.01) {
             const fillPercent = (starFill * 100).toFixed(0);
-            html += `<span class="star" style="background:linear-gradient(90deg,#ffc107 ${fillPercent}%,#ddd ${fillPercent}%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">★</span>`;
+            const partialStyle = [
+                `background:linear-gradient(90deg,#ffc107 ${fillPercent}%,#ddd ${fillPercent}%)`,
+                '-webkit-background-clip:text',
+                '-webkit-text-fill-color:transparent',
+                'background-clip:text'
+            ].join(';');
+            html += `<span class="star" style="${partialStyle}">★</span>`;
         } else {
             html += '<span class="star">★</span>';
         }
@@ -289,7 +307,7 @@ function updateUI() {
 
     if (gameState.currentOrder.length === 0) {
         if (!orderDisplay.querySelector('.placeholder')) {
-            orderDisplay.innerHTML = '<p class="placeholder">Click ingredients to build an order</p>';
+            orderDisplay.innerHTML = `<p class="placeholder">${orderPlaceholderText}</p>`;
         }
     } else {
         const placeholder = orderDisplay.querySelector('.placeholder');
@@ -322,7 +340,9 @@ function updateUI() {
                 const div = document.createElement('div');
                 div.className = `order-item ${item}`;
                 div.dataset.item = item;
-                div.innerHTML = `<span>${GAME_CONFIG.ingredients[item].emoji}</span>${GAME_CONFIG.ingredients[item].name || item.charAt(0).toUpperCase() + item.slice(1)}`;
+                const ingredientConfig = GAME_CONFIG.ingredients[item];
+                const label = ingredientConfig.name || item.charAt(0).toUpperCase() + item.slice(1);
+                div.innerHTML = `<span>${ingredientConfig.emoji}</span>${label}`;
                 if (qty > 1) {
                     const span = document.createElement('span');
                     span.className = 'order-qty';
@@ -345,25 +365,23 @@ function renderCustomers() {
         if (customer) {
             const moods = ['😊', '😐', '😠'];
             const moodEmoji = moods[customer.getMood()];
-            slot.innerHTML = `<div class="customer-info"><div class="customer">${moodEmoji}</div><div class="customer-name">${customer.name}</div></div><div class="order-icons">${customer.getOrderIcons()}</div>`;
+            slot.innerHTML = `
+                <div class="customer-info">
+                    <div class="customer">${moodEmoji}</div>
+                    <div class="customer-name">${customer.name}</div>
+                </div>
+                <div class="order-icons">${customer.getOrderIcons()}</div>
+            `;
             slot.classList.remove('empty', 'tapped');
             slot.style.opacity = customer.served ? '0.5' : '1';
             slot.style.cursor = 'pointer';
 
-            let touchTimeout;
             slot.ontouchstart = function () { this.classList.add('tapped'); };
-            slot.ontouchend = function () {
-                const self = this;
-                touchTimeout = setTimeout(() => { self.classList.remove('tapped'); }, 200);
-            };
-            slot.ontouchcancel = function () {
-                clearTimeout(touchTimeout);
-                this.classList.remove('tapped');
-            };
+            slot.ontouchend = null;
+            slot.ontouchcancel = function () { this.classList.remove('tapped'); };
             slot.onclick = function () {
                 serveCustomer(customer.id);
-                const self = this;
-                setTimeout(() => { self.blur(); self.classList.remove('tapped'); }, 300);
+                this.blur();
             };
         } else {
             slot.innerHTML = '';
