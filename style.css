@@ -85,6 +85,9 @@ body {
 }
 
 .star {
+    display: inline-block;
+    width: 1em;
+    text-align: center;
     color: #ddd;
     transition: color 0.3s ease;
 }
