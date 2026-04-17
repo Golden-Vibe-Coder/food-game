@@ -82,7 +82,7 @@ class Customer {
 const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 const orderPlaceholderText = isTouchDevice ? 'Tap menu items to build an order' : 'Click menu items to build an order';
 
-const SESSION_COOKIE = 'foodGameSession';
+const SESSION_KEY = 'foodGameSession';
 
 function saveSession() {
     const data = {
@@ -91,21 +91,20 @@ function saveSession() {
         ordersMissed: gameState.ordersMissed,
         rating: gameState.rating
     };
-    document.cookie = `${SESSION_COOKIE}=${encodeURIComponent(JSON.stringify(data))};path=/;SameSite=Strict;max-age=31536000`;
+    localStorage.setItem(SESSION_KEY, JSON.stringify(data));
 }
 
 function loadSession() {
-    const match = document.cookie.split('; ').find(row => row.startsWith(`${SESSION_COOKIE}=`));
-    if (!match) return null;
     try {
-        return JSON.parse(decodeURIComponent(match.split('=').slice(1).join('=')));
+        const raw = localStorage.getItem(SESSION_KEY);
+        return raw ? JSON.parse(raw) : null;
     } catch (e) {
         return null;
     }
 }
 
 function hasSession() {
-    return document.cookie.split('; ').some(row => row.startsWith(`${SESSION_COOKIE}=`));
+    return localStorage.getItem(SESSION_KEY) !== null;
 }
 function initGame() {
     gameState.isRunning = false;
@@ -451,20 +450,13 @@ document.addEventListener('DOMContentLoaded', () => {
     initGame();
 
     const savedSession = loadSession();
-    const debugEl = document.createElement('div');
-    debugEl.style.cssText = 'position:fixed;bottom:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:11px;padding:4px 8px;border-radius:4px;z-index:9999;pointer-events:none';
     if (savedSession) {
-        debugEl.textContent = `Cookie found: $${savedSession.totalMoney}, ${savedSession.ordersCompleted} orders`;
         gameState.totalMoney = savedSession.totalMoney ?? 0;
         gameState.ordersCompleted = savedSession.ordersCompleted ?? 0;
         gameState.ordersMissed = savedSession.ordersMissed ?? 0;
         gameState.rating = savedSession.rating ?? 0;
         updateUI();
-    } else {
-        debugEl.textContent = 'No cookie found';
     }
-    document.body.appendChild(debugEl);
-    setTimeout(() => debugEl.remove(), 5000);
 
     document.getElementById('start-btn').addEventListener('click', () => {
         if (gameState.isRunning && !gameState.isPaused) {
