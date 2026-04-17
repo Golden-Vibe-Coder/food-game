@@ -81,6 +81,32 @@ class Customer {
 }
 const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 const orderPlaceholderText = isTouchDevice ? 'Tap menu items to build an order' : 'Click menu items to build an order';
+
+const SESSION_COOKIE = 'foodGameSession';
+
+function saveSession() {
+    const data = {
+        totalMoney: gameState.totalMoney,
+        ordersCompleted: gameState.ordersCompleted,
+        ordersMissed: gameState.ordersMissed,
+        rating: gameState.rating
+    };
+    document.cookie = `${SESSION_COOKIE}=${encodeURIComponent(JSON.stringify(data))};path=/;SameSite=Strict`;
+}
+
+function loadSession() {
+    const match = document.cookie.split('; ').find(row => row.startsWith(`${SESSION_COOKIE}=`));
+    if (!match) return null;
+    try {
+        return JSON.parse(decodeURIComponent(match.split('=').slice(1).join('=')));
+    } catch (e) {
+        return null;
+    }
+}
+
+function hasSession() {
+    return document.cookie.split('; ').some(row => row.startsWith(`${SESSION_COOKIE}=`));
+}
 function initGame() {
     gameState.isRunning = false;
     gameState.totalMoney = 0;
@@ -100,6 +126,7 @@ function startGame() {
     if (!gameState.isRunning) {
         gameState.isRunning = true;
         gameState.isPaused = false;
+        saveSession();
         spawnCustomer();
     } else if (gameState.isPaused) {
         gameState.isPaused = false;
@@ -286,6 +313,7 @@ function renderStars() {
 }
 
 function updateUI() {
+    if (hasSession()) saveSession();
     document.getElementById('earnings').textContent = `$${gameState.totalMoney}`;
     document.getElementById('orders-completed').textContent = gameState.ordersCompleted;
     document.getElementById('orders-missed').textContent = gameState.ordersMissed;
@@ -413,6 +441,7 @@ function resetGame() {
     if (gameState.expireCheckInterval) clearInterval(gameState.expireCheckInterval);
     gameState.isPaused = false;
     initGame();
+    saveSession();
     document.getElementById('start-btn').textContent = 'Start Game';
     document.getElementById('start-btn').disabled = false;
     setIngredientButtonsDisabled(false);
@@ -420,6 +449,15 @@ function resetGame() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initGame();
+
+    const savedSession = loadSession();
+    if (savedSession) {
+        gameState.totalMoney = savedSession.totalMoney ?? 0;
+        gameState.ordersCompleted = savedSession.ordersCompleted ?? 0;
+        gameState.ordersMissed = savedSession.ordersMissed ?? 0;
+        gameState.rating = savedSession.rating ?? 0;
+        updateUI();
+    }
 
     document.getElementById('start-btn').addEventListener('click', () => {
         if (gameState.isRunning && !gameState.isPaused) {
