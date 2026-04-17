@@ -451,13 +451,20 @@ document.addEventListener('DOMContentLoaded', () => {
     initGame();
 
     const savedSession = loadSession();
+    const debugEl = document.createElement('div');
+    debugEl.style.cssText = 'position:fixed;bottom:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:11px;padding:4px 8px;border-radius:4px;z-index:9999;pointer-events:none';
     if (savedSession) {
+        debugEl.textContent = `Cookie found: $${savedSession.totalMoney}, ${savedSession.ordersCompleted} orders`;
         gameState.totalMoney = savedSession.totalMoney ?? 0;
         gameState.ordersCompleted = savedSession.ordersCompleted ?? 0;
         gameState.ordersMissed = savedSession.ordersMissed ?? 0;
         gameState.rating = savedSession.rating ?? 0;
         updateUI();
+    } else {
+        debugEl.textContent = 'No cookie found';
     }
+    document.body.appendChild(debugEl);
+    setTimeout(() => debugEl.remove(), 5000);
 
     document.getElementById('start-btn').addEventListener('click', () => {
         if (gameState.isRunning && !gameState.isPaused) {
