@@ -91,7 +91,7 @@ function saveSession() {
         ordersMissed: gameState.ordersMissed,
         rating: gameState.rating
     };
-    document.cookie = `${SESSION_COOKIE}=${encodeURIComponent(JSON.stringify(data))};path=/;SameSite=Strict`;
+    document.cookie = `${SESSION_COOKIE}=${encodeURIComponent(JSON.stringify(data))};path=/;SameSite=Strict;max-age=31536000`;
 }
 
 function loadSession() {
