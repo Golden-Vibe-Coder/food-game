@@ -313,7 +313,7 @@ function renderStars() {
 }
 
 function updateUI() {
-    if (hasSession()) saveSession();
+    if (hasSession() && gameState.isRunning) saveSession();
     document.getElementById('earnings').textContent = `$${gameState.totalMoney}`;
     document.getElementById('orders-completed').textContent = gameState.ordersCompleted;
     document.getElementById('orders-missed').textContent = gameState.ordersMissed;
